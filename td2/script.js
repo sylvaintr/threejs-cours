@@ -54,11 +54,11 @@ function start() {
     // var myAmbientLight = new THREE.AmbientLight(0xd0d0d0, 0.3);
     // scene.add(myAmbientLight);
 
-    // var myDirectionalLight = new THREE.DirectionalLight(0xffffff, 1);
-    // myDirectionalLight.castShadow = true;
-    // myDirectionalLight.position.set(102, 37, -25);
-    // myDirectionalLight.target.position.set(0, 0, 0);
-    // scene.add(myDirectionalLight);
+    var myDirectionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    myDirectionalLight.castShadow = true;
+    myDirectionalLight.position.set(102, 37, -25);
+    myDirectionalLight.target.position.set(0, 0, 0);
+    scene.add(myDirectionalLight);
 
 
     //object
