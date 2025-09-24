@@ -1,8 +1,10 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-var scene, renderer, camera, cube, controls;
+var scene, renderer, camera, cube, controls, invisibleBox;
 
 function toRender() {
+
+    invisibleBox.rotation.x -= 0.05;
 
     renderer.render(scene, camera);
     requestAnimationFrame(toRender);
@@ -24,6 +26,28 @@ function start() {
     camera.lookAt(new THREE.Vector3(0, 0, 0));
     scene.add(camera);
 
+
+    //object
+    var geometry = new THREE.PlaneGeometry(15, 15);
+    var material = new THREE.MeshStandardMaterial({ color: 0xffffff });
+    const plane = new THREE.Mesh(geometry, material);
+    plane.rotation.x = -Math.PI / 2;
+    plane.receiveShadow = true;
+    plane.castShadow = true;
+    scene.add(plane);
+
+    cube = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshStandardMaterial({ color: 0xffff00, }));
+    cube.position.set(0, 0.5, 0);
+    cube.castShadow = true;
+    scene.add(cube);
+
+
+    const invisibleBoxGeometry = new THREE.BoxGeometry(1, 1, 1);
+    const invisibleBoxMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, opacity: 0, transparent: true });
+    invisibleBox = new THREE.Mesh(invisibleBoxGeometry, invisibleBoxMaterial);
+    invisibleBox.position.set(0, 0, 0);
+    scene.add(invisibleBox);
+
     // light
     var myAmbientLight = new THREE.AmbientLight(0xd0d0d0, 0.3);
     var myDirectionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
@@ -33,23 +57,9 @@ function start() {
     myDirectionalLight.shadow.mapSize.height = 1024;
     myDirectionalLight.shadow.camera.near = 0.5;
     myDirectionalLight.shadow.camera.far = 50;
-    scene.add(myDirectionalLight);
-    myDirectionalLight.position.set(15, 5, 15);
+    invisibleBox.add(myDirectionalLight);
+    myDirectionalLight.position.set(2, 0, 15);
     scene.add(myAmbientLight);
-
-    //object
-    var geometry = new THREE.PlaneGeometry(15, 15);
-    var material = new THREE.MeshStandardMaterial({ color: 0xffffff });
-    const plane = new THREE.Mesh(geometry, material);
-    plane.rotation.x = -Math.PI / 2;
-    plane.receiveShadow = true;
-    scene.add(plane);
-
-    cube = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshStandardMaterial({ color: 0xffff00, }));
-    cube.position.set(0, 0.5, 0);
-    cube.castShadow = true;
-    scene.add(cube);
-
 
 
     controls = new OrbitControls(camera, renderer.domElement);
